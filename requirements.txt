@@ -1,0 +1,9 @@
+langchain
+langchain_community
+chromadb
+setence_transformers
+fastapi
+uvicorn
+pypdf
+python-dotenv
+psycopg2-binary
