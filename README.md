@@ -11,8 +11,6 @@ A Retrieval-Augmented Generation (RAG) system built on UNEP's Global Environment
 
 Instead of asking a general language model about environmental topics and receiving approximate answers, this system retrieves the exact passages from UNEP's own 1,244-page published research to answer questions about biodiversity loss, climate change, pollution, and land degradation.
 
-> *"I built a RAG system on UNEP's own documents. You can ask it questions about UNEP's findings on biodiversity loss, pollution, or climate change and it retrieves the precise passages from your own published research to answer. That is not a toy. That is a prototype of exactly the kind of tool a Chief Digital Office should be building to make institutional knowledge accessible at scale."*
-
 ---
 
 ## Why UNEP Documents Specifically
