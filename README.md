@@ -8,26 +8,61 @@
 
 ## Business Problem
 
-UNEP's Global Environment Outlook 7 is a 1,244-page environmental assessment.
-Finding specific information requires reading hundreds of pages manually.
-This system lets users ask natural language questions and get answers
-directly from the document in seconds — with exact page references.
+UNEP's Global Environment Outlook 7 is a 1,244-page environmental assessment covering biodiversity, climate change, pollution, and land degradation across every region of the world. Finding specific information requires reading hundreds of pages manually.
+
+This RAG system lets policymakers, researchers, and analysts ask natural language questions and get answers sourced directly from the document — with exact page references — in under one second.
+
+Built on LaBSE, a Google multilingual model supporting 109 languages, the system accepts questions in any language and retrieves relevant passages from the English document natively. A question in Swahili retrieves the same passages as the same question in English.
 
 ---
 
-## How It Works
+## Architecture
 
-INDEXING (once at startup):
-1. Load UNEP GEO-7 PDF — 1,244 pages
-2. Split text into 200-word chunks with 20-word overlap
-3. Embed each chunk using LaBSE — 109 languages
-4. Store embeddings and chunks in ChromaDB
+┌─────────────────────────────────────────────────────────────┐
+│                        INDEXING                             │
+│                    (once at startup)                        │
+│                                                             │
+│  UNEP GEO-7 PDF (1,244 pages)                              │
+│         ↓                                                   │
+│  pypdf extracts text page by page                          │
+│         ↓                                                   │
+│  Split into 4,329 chunks (200 words, 20-word overlap)      │
+│         ↓                                                   │
+│  LaBSE converts each chunk to a vector embedding           │
+│         ↓                                                   │
+│  ChromaDB stores chunks + embeddings                       │
+└─────────────────────────────────────────────────────────────┘
 
-QUERYING (every request):
-1. User submits a question via POST /query
-2. Question converted to embedding using LaBSE
-3. ChromaDB finds 5 most semantically similar chunks
-4. Retrieved chunks returned with page references
+┌─────────────────────────────────────────────────────────────┐
+│                        QUERYING                             │
+│                    (every request)                          │
+│                                                             │
+│  User question (any language)                              │
+│         ↓                                                   │
+│  LaBSE converts question to vector embedding               │
+│         ↓                                                   │
+│  ChromaDB finds 5 most similar chunks                      │
+│         ↓                                                   │
+│  FastAPI returns answer + page references                  │
+└─────────────────────────────────────────────────────────────┘
+
+---
+
+## Example
+
+Request:
+
+curl -X POST http://localhost:8002/query \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What are the main drivers of ecosystem degradation?", "n_results": 3}'
+
+Response:
+
+{
+  "question": "What are the main drivers of ecosystem degradation?",
+  "answer": "Ecosystem degradation and biological vulnerability. Unsustainable exploitation and use of natural resources. Climate change vulnerability and extreme events...",
+  "sources": ["UNEP GEO-7 — Page 358", "UNEP GEO-7 — Page 231", "UNEP GEO-7 — Page 1060"]
+}
 
 ---
 
