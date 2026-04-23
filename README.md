@@ -16,48 +16,30 @@ Built on LaBSE, a Google multilingual model supporting 109 languages, the system
 
 ---
 
-## Architecture
+## How It Works
 
-┌─────────────────────────────────────────────────────────────┐
-│                        INDEXING                             │
-│                    (once at startup)                        │
-│                                                             │
-│  UNEP GEO-7 PDF (1,244 pages)                              │
-│         ↓                                                   │
-│  pypdf extracts text page by page                          │
-│         ↓                                                   │
-│  Split into 4,329 chunks (200 words, 20-word overlap)      │
-│         ↓                                                   │
-│  LaBSE converts each chunk to a vector embedding           │
-│         ↓                                                   │
-│  ChromaDB stores chunks + embeddings                       │
-└─────────────────────────────────────────────────────────────┘
+INDEXING (once at startup):
+1. Load UNEP GEO-7 PDF — 1,244 pages
+2. Split text into 200-word chunks with 20-word overlap
+3. Embed each chunk using LaBSE — 109 languages
+4. Store 4,329 embeddings in ChromaDB
 
-┌─────────────────────────────────────────────────────────────┐
-│                        QUERYING                             │
-│                    (every request)                          │
-│                                                             │
-│  User question (any language)                              │
-│         ↓                                                   │
-│  LaBSE converts question to vector embedding               │
-│         ↓                                                   │
-│  ChromaDB finds 5 most similar chunks                      │
-│         ↓                                                   │
-│  FastAPI returns answer + page references                  │
-└─────────────────────────────────────────────────────────────┘
+QUERYING (every request):
+1. User submits a question via POST /query
+2. Question converted to embedding using LaBSE
+3. ChromaDB finds most semantically similar chunks
+4. Retrieved chunks returned with exact page references
 
 ---
 
 ## Example
 
 Request:
-
 curl -X POST http://localhost:8002/query \
   -H "Content-Type: application/json" \
   -d '{"question": "What are the main drivers of ecosystem degradation?", "n_results": 3}'
 
 Response:
-
 {
   "question": "What are the main drivers of ecosystem degradation?",
   "answer": "Ecosystem degradation and biological vulnerability. Unsustainable exploitation and use of natural resources. Climate change vulnerability and extreme events...",
