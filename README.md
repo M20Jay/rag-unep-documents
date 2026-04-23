@@ -1,33 +1,33 @@
-# RAG System on UNEP GEO-7 Documents
+# Week 4 — RAG System on UNEP GEO-7 Documents
+
 **Author:** Martin James Ng'ang'a | [github.com/M20Jay](https://github.com/M20Jay)  
-**Status:** 🔨 In Progress — Week 4 of 15  
+**Status:** 🔨 Week 4 In Progress  
 **Stack:** LaBSE · ChromaDB · FastAPI · pypdf · Docker · Render
 
 ---
 
-## Overview
+## Business Problem
 
-A Retrieval-Augmented Generation (RAG) system that allows users to ask natural language questions about UNEP's Global Environment Outlook 7 — a 1,244-page environmental assessment published by the United Nations Environment Programme.
-
-The system retrieves relevant passages directly from the document rather than relying on a language model's general training knowledge.
+UNEP's Global Environment Outlook 7 is a 1,244-page environmental assessment.
+Finding specific information requires reading hundreds of pages manually.
+This system lets users ask natural language questions and get answers
+directly from the document in seconds — with exact page references.
 
 ---
 
 ## How It Works
 
-```
 INDEXING (once at startup):
-1. Load UNEP GEO-7 PDF (1,244 pages)
+1. Load UNEP GEO-7 PDF — 1,244 pages
 2. Split text into 200-word chunks with 20-word overlap
-3. Embed each chunk using LaBSE
+3. Embed each chunk using LaBSE — 109 languages
 4. Store embeddings and chunks in ChromaDB
 
 QUERYING (every request):
 1. User submits a question via POST /query
 2. Question converted to embedding using LaBSE
-3. ChromaDB retrieves 5 most similar chunks
-4. Chunks returned with page references
-```
+3. ChromaDB finds 5 most semantically similar chunks
+4. Retrieved chunks returned with page references
 
 ---
 
@@ -46,19 +46,13 @@ QUERYING (every request):
 
 ## How to Run Locally
 
-```bash
 git clone https://github.com/M20Jay/rag-unep-documents.git
 cd rag-unep-documents
-
 pip install -r requirements.txt
-
-# Download UNEP GEO-7 PDF and place in data/ folder
-# https://wedocs.unep.org/handle/20.500.11822/30797
-
 uvicorn src.app:app --reload --port 8002
-```
 
-First startup indexes the full document — takes 5-10 minutes. Subsequent startups use the cached ChromaDB index.
+First startup indexes the full document — takes 5-10 minutes.
+Subsequent startups use the cached ChromaDB index — ready in 30 seconds.
 
 ---
 
@@ -68,11 +62,11 @@ First startup indexes the full document — takes 5-10 minutes. Subsequent start
 |-----------|--------|
 | UNEP GEO-7 PDF loaded — 1,244 pages | ✅ Complete |
 | Project structure and dependencies | ✅ Complete |
-| Text chunking pipeline | ⏳ In Progress |
-| LaBSE embeddings | ⏳ In Progress |
-| ChromaDB vector storage | ⏳ In Progress |
-| FastAPI /query endpoint | ⏳ In Progress |
-| FastAPI /health endpoint | ⏳ In Progress |
+| Text chunking — 4,329 chunks created | ✅ Complete |
+| LaBSE embeddings | ✅ Complete |
+| ChromaDB vector storage | ✅ Complete |
+| FastAPI /query endpoint | ✅ Complete |
+| FastAPI /health endpoint | ✅ Complete |
 | Docker containerisation | ⏳ Pending |
 | Render deployment | ⏳ Pending |
 
