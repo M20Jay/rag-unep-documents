@@ -1,7 +1,5 @@
-langchain
-langchain_community
 chromadb
-setence_transformers
+sentence_transformers
 fastapi
 uvicorn
 pypdf
