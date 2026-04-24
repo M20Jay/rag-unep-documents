@@ -1,14 +1,14 @@
 # Week 4 — RAG System on UNEP GEO-7 Documents
 
 **Author:** Martin James Ng'ang'a | [github.com/M20Jay](https://github.com/M20Jay)  
-**Status:** 🔨 Week 4 In Progress  
+**Status:** ✅ Week 4 Complete — Local API confirmed working — AWS deployment in progress  
 **Stack:** LaBSE · ChromaDB · FastAPI · pypdf · Docker · Render
 
 ---
 
 ## Business Problem
 
-UNEP's Global Environment Outlook 7 is a 1,244-page environmental assessment covering biodiversity, climate change, pollution, and land degradation across every region of the world. Finding specific information requires reading hundreds of pages manually.
+A 1,244-page environmental assessment covering biodiversity, climate change, pollution, and land degradation across every region of the world. Finding specific information requires reading hundreds of pages manually.
 
 This RAG system lets policymakers, researchers, and analysts ask natural language questions and get answers sourced directly from the document — with exact page references — in under one second.
 
@@ -16,10 +16,10 @@ Built on LaBSE, a Google multilingual model supporting 109 languages, the system
 
 ---
 
-## How It Works
+## Architecture
 
 INDEXING (once at startup):
-1. Load UNEP GEO-7 PDF — 1,244 pages
+1. Load PDF — 1,244 pages
 2. Split text into 200-word chunks with 20-word overlap
 3. Embed each chunk using LaBSE — 109 languages
 4. Store 4,329 embeddings in ChromaDB
@@ -42,8 +42,8 @@ curl -X POST http://localhost:8002/query \
 Response:
 {
   "question": "What are the main drivers of ecosystem degradation?",
-  "answer": "Ecosystem degradation and biological vulnerability. Unsustainable exploitation and use of natural resources. Climate change vulnerability and extreme events...",
-  "sources": ["UNEP GEO-7 — Page 358", "UNEP GEO-7 — Page 231", "UNEP GEO-7 — Page 1060"]
+  "answer": "primarily driven by land-use change, pollution and climate change. effect of climate warming on land ecosystems as carbon sinks. global plant and animal extinctions.",
+  "sources": ["UNEP GEO-7 — Page 324", "UNEP GEO-7 — Page 158", "UNEP GEO-7 — Page 54"]
 }
 
 ---
@@ -57,7 +57,7 @@ Response:
 | FastAPI | REST API |
 | pypdf | PDF text extraction |
 | Docker | Containerisation |
-| Render | Deployment |
+| AWS | Cloud deployment — in progress |
 
 ---
 
@@ -73,19 +73,27 @@ Subsequent startups use the cached ChromaDB index — ready in 30 seconds.
 
 ---
 
+## Deployment Note
+
+LaBSE is a 1.88GB multilingual model. Render's free tier provides 512MB RAM — insufficient to load LaBSE at runtime. The architecture is correct and intentional. AWS deployment is in progress — LaBSE runs correctly on instances with 1GB+ RAM.
+
+---
+
 ## Progress
 
 | Component | Status |
 |-----------|--------|
-| UNEP GEO-7 PDF loaded — 1,244 pages | ✅ Complete |
+| PDF loaded — 1,244 pages | ✅ Complete |
 | Project structure and dependencies | ✅ Complete |
 | Text chunking — 4,329 chunks created | ✅ Complete |
 | LaBSE embeddings | ✅ Complete |
 | ChromaDB vector storage | ✅ Complete |
 | FastAPI /query endpoint | ✅ Complete |
 | FastAPI /health endpoint | ✅ Complete |
-| Docker containerisation | ⏳ Pending |
-| Render deployment | ⏳ Pending |
+| Docker containerisation | ✅ Complete |
+| Hugging Face dataset — 153MB PDF hosted | ✅ Complete |
+| Render deployment | ❌ Insufficient RAM — LaBSE requires 1GB+ |
+| AWS deployment | ⏳ In progress |
 
 ---
 
