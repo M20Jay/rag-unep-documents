@@ -3,16 +3,32 @@
 **Author:** Martin James Ng'ang'a | [github.com/M20Jay](https://github.com/M20Jay)  
 **Status:** ✅ Week 4 Complete — Local API confirmed working — AWS deployment in progress  
 **Stack:** LaBSE · ChromaDB · FastAPI · pypdf · Docker · Render
+## The Problem
 
----
+1,244 pages. One question.
 
-## Business Problem
+A policymaker preparing for a briefing on biodiversity loss doesn't have time to read UNEP's entire GEO-7 assessment — they need the three paragraphs that actually answer their question, with the page number to back it up in the room.
 
-A 1,244-page environmental assessment covering biodiversity, climate change, pollution, and land degradation across every region of the world. Finding specific information requires reading hundreds of pages manually.
+Most document search tools give you a keyword match. This one gives you an answer — sourced, page-referenced, in under a second — because a paraphrase without a citation is not something a policymaker can defend in a meeting.
 
-This RAG system lets policymakers, researchers, and analysts ask natural language questions and get answers sourced directly from the document — with exact page references — in under one second.
+**The harder problem underneath it:** UNEP operates across regions where English isn't the working language, but nearly every document search tool is built as if it is. A Swahili-speaking analyst using a keyword search tool built for English gets a materially worse experience than an English-speaking one — not because the information isn't there, but because the *tool* can't reach it in their language.
 
-Built on LaBSE, a Google multilingual model supporting 109 languages, the system accepts questions in any language and retrieves relevant passages from the English document natively. A question in Swahili retrieves the same passages as the same question in English.
+This system is built on **LaBSE**, a multilingual model trained across 109 languages, so a question asked in Swahili retrieves the *same* passages as the same question asked in English — no translation layer, no quality drop, native retrieval either way.
+
+
+
+## Where This Fits
+
+Answering a question about a policy document isn't the end goal — it's an input into decisions that require citation, not just an answer:
+
+- **Policy briefing and decision support** — a policymaker preparing for a meeting needs a sourced, page-referenced answer they can defend, not a paraphrase they can't trace back to the original document.
+- **Multilingual institutional access** — UNEP and similar bodies operate across regions where English isn't the working language. Native multilingual retrieval means a Swahili-speaking analyst gets the same access as an English-speaking one, without a separate translation step that introduces error or delay.
+- **Research and citation workflows** — researchers building on GEO-7 findings need exact page references to cite correctly, not a summary that has to be manually re-verified against the source.
+- **Institutional knowledge base integration** — a single 1,244-page document is one instance of a much larger pattern: any organization with dense, authoritative documents (regulatory filings, technical standards, legal texts) has the same retrieval problem.
+- **Feedback loop** — which questions get asked most, and which retrieved passages get flagged as unhelpful, is the real signal that should refine retrieval quality over time.
+
+This is currently a standalone query system — the natural next integration is embedding it into an institution's existing knowledge management or policy-support tooling, rather than requiring users to access it as a separate destination.
+
 
 ---
 
