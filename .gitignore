@@ -6,3 +6,8 @@ chroma_db/
 data/*.pdf
 models
 .DS_store
+.env
+logs/*.log
+.venv/
+__pycache__/
+.pytest_cache/
